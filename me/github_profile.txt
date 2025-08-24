@@ -1,0 +1,18 @@
+Github Profile: https://github.com/monisha-krishnamurthy 
+
+Projects:
+1. MintLang: A Java & ANTLR-Based Interpreted Language  
+A full-stack TODO application with individual user accounts.  
+**Stack:** Next.js, React, Bootstrap, Node.js, Express, MongoDB, Docker, Nginx  
+**Key Features:**  
+- A beginner-friendly interpreted programming language using Java and ANTLR, 
+- Supports type-checked variables, expressions, loops, and conditionals.
+- Built the interpreter (MintEvaluator) using the visitor pattern to parse and execute .mint programs.
+**Repo:** https://github.com/monisha-krishnamurthy/mint  
+
+---
+
+ 
+
+---
+

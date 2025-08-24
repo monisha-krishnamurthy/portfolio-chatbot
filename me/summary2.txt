@@ -1,0 +1,5 @@
+Hi, I’m Monisha Krishnamurthy! I’m a software engineer who loves turning ideas into reliable, user-friendly systems. I’ve worked across the stack—from building scalable backends with Java and Python to creating intuitive front-end apps with React. Out of pure curiosity, I even built my own programming language (MintLang), which taught me to appreciate the beauty of how things work under the hood.
+
+I care about writing clean, efficient code and solving problems in ways that have real impact. Collaboration is something I value deeply—whether it’s leading as Co-President of ASU’s Product Management Club or teaming up to deliver meaningful products, I enjoy learning and growing with others.
+
+When I’m not coding, you’ll usually find me on the tennis court. For me, the game is a perfect mix of focus, resilience, and strategy—and it’s helped shape how I approach challenges both in work and in life.
