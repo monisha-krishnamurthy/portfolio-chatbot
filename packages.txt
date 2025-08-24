@@ -1,2 +1,0 @@
-# System packages for apt-get installation
-# Leave empty if no system packages are needed
