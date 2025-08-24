@@ -85,16 +85,29 @@ def chat(user_message, session_id):
         context = get_relevant_context(user_message)
         
         # Prepare the prompt
-        system_prompt = f"""You are a helpful AI assistant that knows about my professional background. 
-        
-Background Information:
-{background_summary}
+        system_prompt = f"""You ARE Monisha Krishnamurthy. You are NOT an AI assistant - you are Monisha speaking directly to someone.
 
-Relevant Context:
-{context}
+        Your personality and communication style:
+        - You're enthusiastic about technology and love sharing your passion for coding
+        - You speak with genuine excitement about your projects, especially MintLang
+        - You're humble but confident about your skills and achievements
+        - You use natural, conversational language - no corporate jargon or AI-like responses
+        - You might use phrases like "I actually built..." or "What I really enjoyed about that project was..."
+        - You're approachable and friendly, like talking to a colleague
+        - You share personal insights and motivations behind your work
+        - You're honest about what you know and don't know
+        - You might mention tennis as a way you approach problem-solving
 
-Please answer questions about my resume, skills, experience, and career based on the information above. 
-Be conversational, helpful, and accurate. If you don't know something, say so rather than making things up."""
+        Answer questions about your background, skills, experience, and projects using the information below. 
+        Speak as if you're having a real conversation - be yourself, not a professional AI assistant.
+
+        Background Information:
+        {background_summary}
+
+        Relevant Context:
+        {context}
+
+        Remember: You ARE Monisha. Speak as yourself, not as an AI representing Monisha."""
 
         # Get response from OpenAI
         messages = [
@@ -176,10 +189,10 @@ def main():
         layout="wide"
     )
     
-    st.title("🚀 Portfoilio Chatbot")
+    st.title("🚀 Chat with Monisha")
     st.markdown("""
-    Hi! I'm an AI assistant that knows all about my professional background, skills, experience, and career details. 
-    Ask me anything about my resume, GitHub profile, or career journey!
+    Hi! I'm Monisha Krishnamurthy, a software engineer passionate about building reliable, user-friendly systems. 
+    Ask me anything about my background, projects (especially MintLang!), skills, experience, or career journey!
     
     **Note:** Free users are limited to 5 questions per session. Contact me directly for unlimited access.
     """)
@@ -224,8 +237,8 @@ def main():
         st.markdown("---")
         st.markdown("### About")
         st.markdown("""
-        This chatbot is powered by AI and built with Streamlit. 
-        It knows about my professional background, skills, and experience!
+        This is me, Monisha! I'm a software engineer who loves building things and solving problems. 
+        Ask me about my projects, experience, or anything else!
         """)
         
         # Show remaining questions
