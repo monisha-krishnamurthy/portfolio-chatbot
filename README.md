@@ -2,6 +2,7 @@
 
 An intelligent chatbot that knows all about my professional background, skills, experience, and career details. Built with Streamlit and powered by OpenAI's GPT models.
 
+Try it out here: https://monisha-portfolio-chatbot.streamlit.app/
 ## ✨ Features
 
 - 🤖 **AI-Powered Conversations** - Intelligent responses about resume, skills, and experience
