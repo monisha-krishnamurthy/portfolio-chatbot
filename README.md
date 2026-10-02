@@ -1,179 +1,56 @@
-# 🚀 Resume Chatbot - AI-Powered Career Assistant
+# Portfolio Chatbot
 
-An intelligent chatbot that knows all about my professional background, skills, experience, and career details. Built with Streamlit and powered by OpenAI's GPT models.
+A conversational interface for exploring my background, skills, and projects. The repository includes a Streamlit application and a separate Gradio implementation with semantic retrieval.
 
-Try it out here: https://monisha-portfolio-chatbot.streamlit.app/
-## ✨ Features
+**Stack:** Python · OpenAI API · Streamlit · SQLite · NumPy · scikit-learn
 
-- 🤖 **AI-Powered Conversations** - Intelligent responses about resume, skills, and experience
-- 💬 **Interactive Chat Interface** - Clean, modern chat UI with Streamlit
-- 📊 **Question Tracking** - Monitor usage with session management
-- 🔄 **Session Management** - Persistent chat history and question limits
-- 📱 **Responsive Design** - Works great on desktop and mobile
-- 🚀 **Easy Deployment** - One-click deployment to Streamlit Cloud
+[Hosted app](https://monisha-portfolio-chatbot.streamlit.app/)
 
-## 🚀 Quick Deploy to Streamlit Cloud
+## How the Streamlit application works
 
-1. **Fork this repository** to your GitHub account
+1. Checks SQLite for an exact-match cached answer.
+2. Uses `me/summary2.txt` as background context for an OpenAI response when no cached answer exists.
+3. Saves the question and answer in SQLite for subsequent requests.
+4. Displays messages and counts questions within the current Streamlit session.
 
-2. **Go to [Streamlit Cloud](https://streamlit.io/cloud)** and sign up/login
+The interface limits ordinary sessions to five questions. Clearing the chat resets that counter, so this is a demonstration limit rather than robust abuse prevention.
 
-3. **Create a new app:**
-   - Click "New app"
-   - Connect your GitHub repository
-   - Set the main file path to: `streamlit_app.py`
-   - Click "Deploy!"
+## Run locally
 
-4. **Set up secrets:**
-   - In your Streamlit Cloud dashboard, go to "Settings" → "Secrets"
-   - Add your environment variables:
-   ```
-   OPENAI_API_KEY = "your_actual_openai_api_key"
-   PUSHOVER_TOKEN = "your_pushover_token"  # optional
-   PUSHOVER_USER = "your_pushover_user_key"  # optional
-   ```
-
-5. **Your app will be live!** 🎉
-
-## 🛠️ Local Development
-
-### Prerequisites
-- Python 3.8+
-- OpenAI API key
-
-### Installation
-
-1. **Clone the repository:**
-   ```bash
-   git clone <your-repo-url>
-   cd Resume_chatbot-main
-   ```
-
-2. **Create a virtual environment:**
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Set up secrets:**
-   
-   **Option A: Local development (recommended)**
-   Create `.streamlit/secrets.toml`:
-   ```toml
-   OPENAI_API_KEY = "your_openai_api_key_here"
-   PUSHOVER_TOKEN = "your_pushover_token_here"  # optional
-   PUSHOVER_USER = "your_pushover_user_key_here"  # optional
-   ```
-   
-   **Option B: Environment variables**
-   Create a `.env` file in the root directory:
-   ```
-   OPENAI_API_KEY=your_openai_api_key_here
-   PUSHOVER_TOKEN=your_pushover_token_here  # optional
-   PUSHOVER_USER=your_pushover_user_key_here  # optional
-   ```
-
-5. **Run the app:**
-   ```bash
-   streamlit run streamlit_app.py
-   ```
-
-6. **Open your browser** and go to `http://localhost:8501`
-
-## 📁 Project Structure
-
-```
-Resume_chatbot-main/
-├── streamlit_app.py          # Main Streamlit application
-├── database.py              # Database operations and caching
-├── embeddings.py            # Embedding utilities
-├── search.py                # Search functionality
-├── me/                      # Resume data and embeddings
-│   ├── embeddings.json      # Pre-computed embeddings
-│   ├── summary2.txt         # Background summary
-│   ├── github_profile.txt   # GitHub profile data
-│   └── MKM_Master_Resume.pdf # Resume PDF (not in repo)
-├── requirements.txt         # Python dependencies
-├── .streamlit/              # Streamlit configuration
-│   └── config.toml
-├── packages.txt             # System dependencies
-└── README.md               # This file
+```bash
+git clone https://github.com/monisha-krishnamurthy/portfolio-chatbot.git
+cd portfolio-chatbot
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
 ```
 
-## 🔧 Configuration
+Create a local `.env` file containing your own key:
 
-### Environment Variables
+```dotenv
+OPENAI_API_KEY=your_openai_api_key_here
+```
 
-- `OPENAI_API_KEY` (required): Your OpenAI API key
-- `PUSHOVER_TOKEN` (optional): For push notifications
-- `PUSHOVER_USER` (optional): Pushover user key
+```bash
+streamlit run streamlit_app.py
+```
 
-### Customization
+Alternatively, configure `OPENAI_API_KEY` in `.streamlit/secrets.toml` or the deployment's Streamlit secrets. Keep secrets out of version control. API use may incur charges.
 
-- **Question Limit**: Modify `MAX_QUESTIONS` in `streamlit_app.py`
-- **Admin Access**: Change `ADMIN_SESSION_ID` for unlimited access
-- **Model**: Update the OpenAI model in the `chat()` function
-- **Styling**: Customize the Streamlit theme and layout
+## Repository guide
 
-## 🤖 How It Works
+- `streamlit_app.py`: Streamlit interface and summary-based response generation.
+- `database.py`: SQLite initialization, answer caching, and session helpers.
+- `resume_bot.py`: separate Gradio implementation with embedding-based retrieval and tool calls.
+- `embeddings.py` and `search.py`: embedding and search utilities.
+- `me/`: resume PDF, background text, GitHub profile text, and stored embeddings.
 
-1. **Document Processing**: Resume and profile data are processed into embeddings
-2. **Context Retrieval**: User queries are matched against relevant content
-3. **AI Response**: OpenAI GPT generates contextual responses
-4. **Caching**: Responses are cached for faster future access
-5. **Session Management**: Tracks user sessions and question limits
+## Implementation notes
 
-## 🎯 Use Cases
+The Streamlit entry point currently returns the background summary from `get_relevant_context()`; it does not perform semantic retrieval. It displays conversation history but sends only the current question and background context to the model.
 
-- **Portfolio Integration**: Embed in your personal website
-- **Career Networking**: Share with potential employers
-- **Interview Preparation**: Practice common questions
-- **Professional Branding**: Showcase AI skills and experience
+The Gradio implementation has additional requirements, including Gradio and Hugging Face configuration, and is not covered by the Streamlit quick start. Its token debug print should be removed before running with real credentials.
 
-## 🛡️ Security & Privacy
+Questions and generated answers are stored locally in `me/db.sqlite`; they are not confined to browser session memory. Background context and uncached questions are sent to OpenAI. The resume and text files under `me/` are public repository content.
 
-- **No Data Storage**: Chat history is session-based only
-- **API Key Protection**: Secrets are securely managed
-- **Rate Limiting**: Built-in question limits prevent abuse
-- **Input Validation**: All user inputs are sanitized
-
-## 🚀 Deployment Options
-
-### Streamlit Cloud (Recommended)
-- Free tier available
-- Automatic deployments from GitHub
-- Built-in secret management
-- Global CDN
-
-### Other Options
-- **Heroku**: Use the `Procfile` and `runtime.txt`
-- **Railway**: Direct GitHub integration
-- **Vercel**: Python runtime support
-- **AWS/GCP**: Container deployment
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-MIT License - feel free to use this project for your own resume chatbot!
-
-## 🙏 Acknowledgments
-
-- Built with [Streamlit](https://streamlit.io/)
-- Powered by [OpenAI GPT](https://openai.com/)
-- Icons from [Emoji](https://emojipedia.org/)
-
----
-
-**Ready to deploy?** Follow the [Quick Deploy](#-quick-deploy-to-streamlit-cloud) guide above! 🚀
+Generated responses can be inaccurate. Update the source material when your background changes and review the app's answers before using them professionally.
