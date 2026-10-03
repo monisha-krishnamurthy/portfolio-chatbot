@@ -17,7 +17,7 @@ A conversational interface for exploring my background, skills, and projects. Th
 3. Saves the question and answer in SQLite for subsequent requests.
 4. Displays messages and counts questions within the current Streamlit session.
 
-The interface limits ordinary sessions to five questions. Clearing the chat resets that counter, so this is a demonstration limit rather than robust abuse prevention.
+The interface limits ordinary sessions to five questions. Clearing the chat retains that counter. An app-wide server-side quota also limits uncached API requests across sessions.
 
 ## Run locally
 
@@ -58,3 +58,15 @@ The Gradio implementation has additional requirements, including Gradio and Hugg
 Questions and generated answers are stored locally in `me/db.sqlite`; they are not confined to browser session memory. Background context and uncached questions are sent to OpenAI. The resume and text files under `me/` are public repository content.
 
 Generated responses can be inaccurate. Update the source material when your background changes and review the app's answers before using them professionally.
+
+## Demo usage controls
+
+Each deployment allows at most **5 uncached AI requests per rolling minute** and
+**50 per rolling 24 hours**, shared across all visitors. Requests are reserved
+atomically in SQLite before calling the provider; failed attempts count too.
+Automatic provider retries are disabled. Cached results do not consume this quota.
+AI responses are capped at **500 output tokens**.
+
+Counters survive browser refreshes and clearing chat, but may reset when hosting
+replaces the local filesystem. Separate instances have separate counters. These
+controls reduce usage; they are not a hard dollar cap or per-person authentication.

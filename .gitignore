@@ -55,3 +55,6 @@ Thumbs.db
 *.tmp
 *.temp
 
+
+# Server-side request counters
+.usage/

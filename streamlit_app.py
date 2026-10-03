@@ -9,6 +9,7 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity 
 from database import get_answer, add_unknown_question, add_qa, get_session, add_session, save_unknown_question, increment_questions
 import uuid
+from usage_limits import reserve_request, UsageLimitError
 
 # Load environment variables (for local development)
 load_dotenv(override=True)
@@ -37,7 +38,7 @@ def get_openai_client():
         st.error("❌ OpenAI API key not found! Please set it in Streamlit Cloud secrets or as an environment variable.")
         st.stop()
     
-    return OpenAI(api_key=api_key)
+    return OpenAI(api_key=api_key, max_retries=0, timeout=30)
 
 # Initialize OpenAI client
 client = get_openai_client()
@@ -69,6 +70,8 @@ background_summary = load_summary()
 def chat(user_message, session_id):
     """Main chat function that handles user queries"""
     try:
+        if len(user_message) > 2000:
+            return "Please keep your question under 2,000 characters."
         # Check question limit for non-admin users
         question_count = st.session_state.get("question_count", 0)
         if session_id != ADMIN_SESSION_ID and question_count >= MAX_QUESTIONS:
@@ -115,6 +118,7 @@ def chat(user_message, session_id):
             {"role": "user", "content": user_message}
         ]
         
+        reserve_request()
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=messages,
@@ -131,8 +135,10 @@ def chat(user_message, session_id):
         
         return answer
         
+    except UsageLimitError as e:
+        return str(e)
     except Exception as e:
-        st.error(f"Error in chat: {e}")
+        st.error("The AI service is temporarily unavailable. Please try again later.")
         return "I apologize, but I encountered an error. Please try again."
 
 def get_relevant_context(query):
@@ -211,7 +217,7 @@ def main():
             st.markdown(message["content"])
     
     # Chat input
-    if prompt := st.chat_input("Ask me about my resume, skills, experience, or career..."):
+    if prompt := st.chat_input("Ask me about my resume, skills, experience, or career...", max_chars=2000):
         # Add user message to chat history
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
@@ -231,7 +237,6 @@ def main():
         
         if st.button("Clear Chat"):
             st.session_state.messages = []
-            st.session_state.question_count = 0
             st.rerun()
         
         st.markdown("---")
