@@ -6,6 +6,10 @@ A conversational interface for exploring my background, skills, and projects. Th
 
 [Hosted app](https://monisha-portfolio-chatbot.streamlit.app/)
 
+## Preview
+
+![Portfolio chatbot answering a question about Monisha's project experience](docs/chatbot-preview.png)
+
 ## How the Streamlit application works
 
 1. Checks SQLite for an exact-match cached answer.
